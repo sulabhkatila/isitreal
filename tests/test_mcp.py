@@ -1,5 +1,5 @@
 import pytest
-from depcheck.mcp_server import mcp
+from slopguard.mcp_server import mcp
 
 
 @pytest.mark.asyncio

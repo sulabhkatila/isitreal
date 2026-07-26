@@ -1,1 +1,1 @@
-# Test suite for depcheck
+# Test suite for slopguard

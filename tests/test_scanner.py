@@ -1,5 +1,5 @@
-from depcheck import verify
-from depcheck.scanner import parse_dependencies
+from slopguard import verify
+from slopguard.scanner import parse_dependencies
 
 
 def test_parse_requirements_txt(tmp_path):

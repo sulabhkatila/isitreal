@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "depcheck"
+name = "slopguard"
 version = "0.1.0"
 description = "Dependency reality-checker for AI coding agents to verify packages before installing"
 readme = "README.md"
@@ -30,11 +30,11 @@ dev = [
 ]
 
 [project.scripts]
-depcheck = "depcheck.cli:main"
-depcheck-mcp = "depcheck.mcp_server:main"
+slopguard = "slopguard.cli:main"
+slopguard-mcp = "slopguard.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["depcheck"]
+packages = ["slopguard"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

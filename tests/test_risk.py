@@ -1,4 +1,4 @@
-from depcheck.risk import (
+from slopguard.risk import (
     check_conflation,
     compute_risk,
     get_fuzzy_suggestions,

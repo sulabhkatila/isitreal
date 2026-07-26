@@ -1,5 +1,5 @@
 from click.testing import CliRunner
-from depcheck.cli import cli
+from slopguard.cli import cli
 
 
 def test_cli_check_requests(mock_pypi):

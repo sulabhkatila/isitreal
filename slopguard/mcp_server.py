@@ -1,11 +1,11 @@
 from typing import List
 from mcp.server.fastmcp import FastMCP
 
-from depcheck import verify
-from depcheck.models import PackageResult
+from slopguard import verify
+from slopguard.models import PackageResult
 
 mcp = FastMCP(
-    "depcheck",
+    "slopguard",
     instructions="Dependency reality-checker for AI coding agents. Call before adding dependencies or installing packages.",
 )
 

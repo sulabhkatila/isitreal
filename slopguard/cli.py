@@ -5,8 +5,8 @@ from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 
-from depcheck import verify
-from depcheck.models import PackageResult
+from slopguard import verify
+from slopguard.models import PackageResult
 
 console = Console()
 
@@ -27,7 +27,7 @@ def _format_risk_badge(risk: Optional[str], exists: bool) -> str:
 
 @click.group()
 def cli():
-    """depcheck: dependency reality-checker for AI coding agents."""
+    """slopguard: dependency reality-checker for AI coding agents."""
     pass
 
 
@@ -120,8 +120,8 @@ def scan(target: str, fail_on: Optional[str]):
 
 @cli.command()
 def mcp():
-    """Run the depcheck MCP server."""
-    from depcheck.mcp_server import main as run_mcp
+    """Run the slopguard MCP server."""
+    from slopguard.mcp_server import main as run_mcp
     run_mcp()
 
 
