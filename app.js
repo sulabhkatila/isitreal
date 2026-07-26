@@ -76,8 +76,46 @@
   });
 
   /* ==========================================================================
-     4. Interactive Sandbox — Realistic Package Reality Database
+     4. Interactive Sandbox — Realistic Package Reality Database & Datasets
      ========================================================================== */
+
+  let TOP_PACKAGES_SET = new Set([
+    'requests', 'pydantic', 'httpx', 'click', 'rich', 'mcp', 'packaging', 'pytest',
+    'numpy', 'pandas', 'scipy', 'matplotlib', 'seaborn', 'scikit-learn', 'tensorflow',
+    'torch', 'keras', 'flask', 'django', 'fastapi', 'uvicorn', 'gunicorn', 'celery',
+    'redis', 'sqlalchemy', 'psycopg2', 'pymysql', 'pyyaml', 'boto3', 'urllib3',
+    'aiohttp', 'pillow', 'beautifulsoup4', 'transformers', 'openai', 'langchain',
+    'anthropic', 'google-genai', 'respx', 'pytest-cov', 'pytest-asyncio', 'hatchling'
+  ]);
+
+  let HALLUCINATED_SET = new Set([
+    'react-codeshift', 'jscodeshift-react', 'python-sqlite', 'python-sqlite3',
+    'python-mysql', 'python-postgresql', 'django-postgres', 'huggingface-cli',
+    'huggingface-hub-cli', 'scikit-learn-utils', 'tensorflow-gpu-utils',
+    'torch-utils', 'keras-utils', 'openai-utils', 'flask-rest', 'fastapi-utils-cli',
+    'url-lib3', 'pyyaml-utils', 'cryptography-utils', 'pandas-utils', 'numpy-utils'
+  ]);
+
+  // Try fetching complete real datasets from data/
+  fetch('data/top_pypi_packages.json')
+    .then((r) => r.json())
+    .then((list) => {
+      if (Array.isArray(list)) {
+        list.forEach((pkg) => TOP_PACKAGES_SET.add(pkg.toLowerCase()));
+      }
+    })
+    .catch(() => {
+      // Offline fallback: continue with built-in set
+    });
+
+  fetch('data/hallucinated_packages.json')
+    .then((r) => r.json())
+    .then((list) => {
+      if (Array.isArray(list)) {
+        list.forEach((pkg) => HALLUCINATED_SET.add(pkg.toLowerCase()));
+      }
+    })
+    .catch(() => {});
 
   const PACKAGE_DB = {
     'requests': {
@@ -199,16 +237,63 @@
   };
 
   /**
-   * Smart heuristic simulator for arbitrary user-entered package names
+   * Helper to find fuzzy close matches from TOP_PACKAGES_SET
+   */
+  function getFuzzySuggestions(name, limit = 3) {
+    const clean = name.toLowerCase();
+    const matches = [];
+    TOP_PACKAGES_SET.forEach((pkg) => {
+      if (pkg.includes(clean) || clean.includes(pkg) || Math.abs(pkg.length - clean.length) <= 2) {
+        if (pkg !== clean) matches.push(pkg);
+      }
+    });
+    return matches.slice(0, limit);
+  }
+
+  /**
+   * Check if package name is a conflation of two top packages
+   */
+  function checkConflation(name) {
+    const lower = name.toLowerCase();
+    if (TOP_PACKAGES_SET.has(lower)) return null;
+
+    const parts = lower.split(/[-_]/);
+    if (parts.length >= 2) {
+      const matching = parts.filter((p) => p.length >= 3 && TOP_PACKAGES_SET.has(p));
+      if (matching.length >= 2) {
+        return `Package name looks like a conflation of well-known packages ('${matching[0]}' and '${matching[1]}').`;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Smart simulator for arbitrary user-entered package names
    */
   function simulatePackageLookup(name) {
-    const clean = name.trim().toLowerCase();
+    const clean = (name || '').trim().toLowerCase();
+    if (!clean) {
+      return {
+        name: '-',
+        exists: false,
+        canonical_name: null,
+        latest_version: null,
+        summary: null,
+        first_release_date: null,
+        total_releases: 0,
+        suggestions: [],
+        risk: null,
+        reasons: ['Please enter a Python package name above to check.'],
+        age_days: null
+      };
+    }
+
     if (PACKAGE_DB[clean]) {
       return PACKAGE_DB[clean];
     }
 
-    // Heuristics for interactive realism
-    if (clean.includes('react-') || clean.includes('-postgres') || clean.includes('codeshift') || clean.includes('slop')) {
+    // 1. High risk if in hallucinated list
+    if (HALLUCINATED_SET.has(clean) || clean.includes('react-codeshift') || clean.includes('django-postgres')) {
       return {
         name: name.trim(),
         exists: false,
@@ -217,36 +302,59 @@
         summary: null,
         first_release_date: null,
         total_releases: 0,
-        suggestions: [`${clean}-lib`, 'requests', 'pydantic'],
+        suggestions: getFuzzySuggestions(clean),
         risk: 'high',
         reasons: [
-          'Package name matches known AI hallucination syntax pattern.',
-          'High risk of slopsquatting interception if installed without verification.'
+          'Package name is in the known list of AI-hallucinated/slopsquatted packages.',
+          'High risk of malicious slopsquatting interception if installed without verification.'
         ],
         age_days: null
       };
     }
 
-    if (['numpy', 'django', 'flask', 'httpx', 'click', 'rich', 'fastapi', 'pytest'].includes(clean)) {
+    // 2. High risk if conflation detected
+    const confReason = checkConflation(name.trim());
+    if (confReason) {
+      return {
+        name: name.trim(),
+        exists: false,
+        canonical_name: null,
+        latest_version: null,
+        summary: null,
+        first_release_date: null,
+        total_releases: 0,
+        suggestions: getFuzzySuggestions(clean),
+        risk: 'high',
+        reasons: [
+          confReason,
+          'Conflating two valid libraries into a single nonexistent package name is a high-risk hallucination.'
+        ],
+        age_days: null
+      };
+    }
+
+    // 3. Low risk if in top packages
+    if (TOP_PACKAGES_SET.has(clean)) {
       return {
         name: clean,
         exists: true,
         canonical_name: clean,
         latest_version: '3.1.0',
         summary: `Official ${clean} package on PyPI.`,
-        first_release_date: '2015-01-01T00:00:00Z',
-        total_releases: 85,
+        first_release_date: '2016-01-01T00:00:00Z',
+        total_releases: 94,
         suggestions: [],
         risk: 'low',
         reasons: [
           'Package is in the top PyPI packages by download count.',
-          'Package has been published for over 3,500 days.'
+          'Package has been published for over 2,500 days.'
         ],
-        age_days: 3500
+        age_days: 2500
       };
     }
 
-    // Default missing package
+    // 4. Default missing package
+    const suggestions = getFuzzySuggestions(clean);
     return {
       name: name.trim(),
       exists: false,
@@ -255,18 +363,18 @@
       summary: null,
       first_release_date: null,
       total_releases: 0,
-      suggestions: [`${clean}-utils`, `${clean}-core`, 'requests'],
+      suggestions: suggestions.length ? suggestions : ['requests', 'pydantic', 'httpx'],
       risk: null,
       reasons: [
         'Package does not exist on PyPI.',
-        'No high-risk hallucination flags detected.'
+        'No known hallucination or conflation pattern detected.'
       ],
       age_days: null
     };
   }
 
   /* ==========================================================================
-     5. Render Sandbox Single Package Results
+     5. Render Sandbox Single Package Results & Live Input Handling
      ========================================================================== */
 
   const resultContainer = document.getElementById('sandbox-result-view');
@@ -317,11 +425,11 @@
         </div>
         <div class="detail-item">
           <span class="detail-label">Package Age</span>
-          <span class="detail-value">${res.age_days !== null ? `${res.age_days.toLocaleString()} days` : 'N/A'}</span>
+          <span class="detail-value">${res.age_days !== null && res.age_days !== undefined ? `${res.age_days.toLocaleString()} days` : 'N/A'}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Total Releases</span>
-          <span class="detail-value">${res.total_releases}</span>
+          <span class="detail-value">${res.total_releases || 0}</span>
         </div>
       </div>
 
@@ -340,36 +448,45 @@
     `;
   }
 
-  if (checkBtn && packageInput) {
-    const handleLookup = () => {
-      const query = packageInput.value;
-      if (!query) return;
-      const res = simulatePackageLookup(query);
-      renderPackageResult(res);
-    };
+  function handleSinglePackageLookup() {
+    if (!packageInput) return;
+    const query = packageInput.value;
+    const res = simulatePackageLookup(query);
+    renderPackageResult(res);
+  }
 
-    checkBtn.addEventListener('click', handleLookup);
+  if (checkBtn && packageInput) {
+    checkBtn.addEventListener('click', handleSinglePackageLookup);
+
+    // Live update AS the user types or pastes
+    packageInput.addEventListener('input', handleSinglePackageLookup);
     packageInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') handleLookup();
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSinglePackageLookup();
+      }
     });
 
     // Initial render
-    renderPackageResult(simulatePackageLookup(packageInput.value));
+    handleSinglePackageLookup();
   }
 
-  // Example pills click
-  document.querySelectorAll('.example-pill').forEach((pill) => {
+  // Example pills click with active highlighting
+  const examplePills = document.querySelectorAll('.example-pill');
+  examplePills.forEach((pill) => {
     pill.addEventListener('click', () => {
       const pkgName = pill.getAttribute('data-pkg');
       if (packageInput && pkgName) {
+        examplePills.forEach((p) => p.classList.remove('active'));
+        pill.classList.add('active');
         packageInput.value = pkgName;
-        renderPackageResult(simulatePackageLookup(pkgName));
+        handleSinglePackageLookup();
       }
     });
   });
 
   /* ==========================================================================
-     6. Interactive Sandbox — Tabs & Batch Scanner
+     6. Interactive Sandbox — Tabs & Live Batch Scanner
      ========================================================================== */
 
   const tabBtns = document.querySelectorAll('.sandbox-tab-btn');
@@ -391,7 +508,7 @@
   const scannerOutput = document.getElementById('scanner-output-view');
 
   function parseAndScanRequirements(text) {
-    const lines = text.split('\n');
+    const lines = (text || '').split('\n');
     const results = [];
 
     lines.forEach((line) => {
@@ -421,8 +538,8 @@
   function renderScannerResults(results) {
     if (!scannerOutput) return;
 
-    if (results.length === 0) {
-      scannerOutput.innerHTML = `<p style="padding:1rem;color:#94a3b8;">No valid package dependencies found.</p>`;
+    if (!results || results.length === 0) {
+      scannerOutput.innerHTML = `<p style="padding:1rem;color:#94a3b8;">No valid package dependencies found in textarea.</p>`;
       return;
     }
 
@@ -448,7 +565,7 @@
           <td>${existsHtml}</td>
           <td>${riskHtml}</td>
           <td><code>${res.latest_version || '-'}</code></td>
-          <td>${res.age_days !== null ? `${res.age_days}d` : '-'}</td>
+          <td>${res.age_days !== null && res.age_days !== undefined ? `${res.age_days}d` : '-'}</td>
           <td style="color:#94a3b8;font-size:0.82rem;">${noteText}</td>
         </tr>
       `;
@@ -473,20 +590,26 @@
     `;
   }
 
-  if (runScanBtn && scannerInput) {
-    runScanBtn.addEventListener('click', () => {
-      const results = parseAndScanRequirements(scannerInput.value);
-      renderScannerResults(results);
-    });
+  function handleBatchScan() {
+    if (!scannerInput) return;
+    const results = parseAndScanRequirements(scannerInput.value);
+    renderScannerResults(results);
+  }
 
-    // Run scan on initial load
-    renderScannerResults(parseAndScanRequirements(scannerInput.value));
+  if (scannerInput) {
+    // Live scan AS the user edits textarea
+    scannerInput.addEventListener('input', handleBatchScan);
+    if (runScanBtn) {
+      runScanBtn.addEventListener('click', handleBatchScan);
+    }
+    // Initial scan render
+    handleBatchScan();
   }
 
   if (resetScannerBtn && scannerInput) {
     resetScannerBtn.addEventListener('click', () => {
       scannerInput.value = `# Genuine core libraries\nrequests==2.32.3\npydantic>=2.7.0\nhttpx==0.27.0\n\n# Hallucinated / slopsquatted AI agent targets\nreact-codeshift>=1.0.0\ndjango-postgres\nfancylib==0.1.0`;
-      renderScannerResults(parseAndScanRequirements(scannerInput.value));
+      handleBatchScan();
     });
   }
 

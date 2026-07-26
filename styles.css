@@ -826,22 +826,28 @@ body {
   transition: all 0.2s ease;
 }
 
-.example-pill:hover {
+.example-pill:hover,
+.example-pill.active {
   border-color: var(--border-active);
   color: var(--text-primary);
   background-color: var(--accent-emerald-dim);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
 }
 
-.pill-danger:hover {
+.pill-danger:hover,
+.pill-danger.active {
   border-color: rgba(244, 63, 94, 0.6);
   color: #fda4af;
   background-color: var(--accent-rose-dim);
+  box-shadow: 0 0 10px rgba(244, 63, 94, 0.25);
 }
 
-.pill-warn:hover {
+.pill-warn:hover,
+.pill-warn.active {
   border-color: rgba(245, 158, 11, 0.6);
   color: #fde047;
   background-color: var(--accent-amber-dim);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
 }
 
 /* Simulation Result View */
