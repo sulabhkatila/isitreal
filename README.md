@@ -3,10 +3,14 @@
 [![PyPI version](https://img.shields.io/pypi/v/isitreal.svg)](https://pypi.org/project/isitreal/)
 [![Python versions](https://img.shields.io/pypi/pyversions/isitreal.svg)](https://pypi.org/project/isitreal/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Documentation Website](https://img.shields.io/badge/Docs-Interactive%20Website-06B6D4.svg)](https://sulabhkatila.github.io/isitreal/)
 [![MCP Server](https://img.shields.io/badge/MCP-Enabled-10B981.svg)](#3-model-context-protocol-mcp-server-for-ai-agents)
 [![Security: Pre-Install Shield](https://img.shields.io/badge/Security-Pre--Install%20Shield-6366F1.svg)](#why-choose-isitreal-the-pre-install-advantage)
 
 **Stop AI Hallucinations, Slopsquatting, Typosquatting, and Dependency Conflation BEFORE `pip install`. Native Model Context Protocol (MCP) Server for Autonomous Coding Agents.**
+
+> [!TIP]
+> **🌐 Official Interactive Documentation & Sandbox**: Explore live package verification, interactive slopsquatting simulators, architecture diagrams, explainable risk scoring, and search across all API & CLI references at **[https://sulabhkatila.github.io/isitreal/](https://sulabhkatila.github.io/isitreal/)** (mirror link: [https://sulabhkatila.githu.io/isitreal/](https://sulabhkatila.github.io/isitreal/)).
 
 ---
 
@@ -124,6 +128,16 @@ Before adding any Python dependency to `requirements.txt`, `pyproject.toml`, `se
    - Use one of the verified legitimate alternatives listed in `suggestions`.
 3. NEVER bypass pre-install verification for third-party Python packages.
 ```
+
+---
+
+## Official Interactive Website & Sandbox
+
+We provide a calm, readable discovery website and live interactive sandbox where you can test package verification without installing anything locally:
+
+* **Official Website**: **[https://sulabhkatila.github.io/isitreal/](https://sulabhkatila.github.io/isitreal/)** *(also accessible via [https://sulabhkatila.githu.io/isitreal/](https://sulabhkatila.github.io/isitreal/))*
+* **Live Sandbox & Simulator**: Test package lookups (`requests`, `react-codeshift`, `fancylib`, `django-postgres`) and scan entire `requirements.txt` blocks in your browser.
+* **Command Palette (`⌘K`)**: Instant search across all Python APIs, CLI commands, and MCP setup guides.
 
 ---
 
