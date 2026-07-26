@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="shieldGrad" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.4"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.0"/>
+    </linearGradient>
+  </defs>
+  <!-- Subtle ambient glow -->
+  <circle cx="32" cy="32" r="28" fill="url(#glowGrad)" opacity="0.4" />
+  <!-- Shield Background -->
+  <path d="M32 6L14 13.5V28C14 42.5 21.8 54.8 32 59C42.2 54.8 50 42.5 50 28V13.5L32 6Z" fill="url(#shieldGrad)" stroke="#34D399" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Calm checkmark / verification path -->
+  <path d="M23 31.5L29 37.5L41 24.5" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Micro glowing AI node dot -->
+  <circle cx="41" cy="24.5" r="2.5" fill="#A7F3D0" />
+</svg>

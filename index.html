@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>isitreal — Dependency Reality-Checker for AI Coding Agents</title>
+  <meta name="description" content="Verify Python dependencies before install, not scan after the fact. Stop AI coding agent hallucinations and slopsquatting with real-time PyPI checks and native MCP server." />
+  <meta name="keywords" content="ai, agent, security, dependencies, slopsquatting, hallucination, mcp, pypi, python, verification" />
+  <meta property="og:title" content="isitreal — Dependency Reality-Checker for AI Coding Agents" />
+  <meta property="og:description" content="Verify Python dependencies before install, not scan after the fact. Stop AI coding agent hallucinations and slopsquatting with real-time PyPI checks and native MCP server." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Top Navigation -->
+  <header class="top-nav" id="top-nav">
+    <div class="nav-container">
+      <a href="#hero" class="brand-link" aria-label="isitreal home">
+        <img src="favicon.svg" alt="isitreal shield logo" class="brand-logo" width="32" height="32" />
+        <span class="brand-name">isitreal</span>
+        <span class="brand-version">v0.1.0</span>
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#why-it-exists" class="nav-link">Why This Exists</a>
+        <a href="#sandbox" class="nav-link nav-link-highlight">Interactive Sandbox</a>
+        <a href="#quickstart" class="nav-link">Quickstart</a>
+        <a href="#python-api" class="nav-link">Python API</a>
+        <a href="#cli-reference" class="nav-link">CLI</a>
+        <a href="#mcp-server" class="nav-link">MCP Server</a>
+        <a href="#risk-scoring" class="nav-link">Risk Scoring</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button type="button" class="search-btn" id="search-trigger-btn" aria-label="Search documentation (Cmd+K)">
+          <svg class="icon-search" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span class="search-text">Search docs...</span>
+          <kbd class="kbd-shortcut">⌘K</kbd>
+        </button>
+        <button type="button" class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle dark/light theme">
+          <!-- Sun / Moon icons dynamically rendered via CSS -->
+          <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="https://github.com/example/isitreal" target="_blank" rel="noopener noreferrer" class="github-link" aria-label="GitHub Repository">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <button type="button" class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle mobile menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+    <nav class="mobile-nav">
+      <a href="#why-it-exists" class="mobile-link">Why This Exists</a>
+      <a href="#sandbox" class="mobile-link mobile-link-accent">Interactive Sandbox</a>
+      <a href="#quickstart" class="mobile-link">Quickstart</a>
+      <a href="#python-api" class="mobile-link">Python API</a>
+      <a href="#cli-reference" class="mobile-link">CLI</a>
+      <a href="#mcp-server" class="mobile-link">MCP Server</a>
+      <a href="#risk-scoring" class="mobile-link">Risk Scoring</a>
+      <a href="#faq" class="mobile-link">FAQ & Architecture</a>
+    </nav>
+  </div>
+
+  <div class="page-layout">
+    <!-- Main Content Area -->
+    <main class="main-content" id="main-content">
+      <!-- HERO SECTION -->
+      <section class="hero-section" id="hero">
+        <div class="hero-background-glow"></div>
+        <div class="hero-content">
+          <div class="hero-badge" role="status">
+            <span class="badge-dot"></span>
+            <span>Security Shield for Autonomous AI Coding Agents</span>
+          </div>
+          <h1 class="hero-title">
+            Verify dependencies <span class="highlight-gradient">before</span> install.<br />
+            Not scan after the fact.
+          </h1>
+          <p class="hero-subtitle">
+            AI coding agents frequently hallucinate package names or conflate real packages into fake targets.
+            Attackers pre-register these names with malicious payloads (<strong>slopsquatting</strong>). 
+            <code>isitreal</code> verifies existence, risk, and slopsquatting in real time—before <code>pip install</code> runs.
+          </p>
+
+          <!-- Quick Copy Pill -->
+          <div class="hero-command-bar">
+            <div class="command-input-group">
+              <span class="command-prompt">$</span>
+              <code class="command-text">pip install isitreal</code>
+            </div>
+            <button type="button" class="copy-btn copy-command-btn" data-copy="pip install isitreal" aria-label="Copy install command">
+              <svg class="icon-copy" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span class="copy-label">Copy</span>
+            </button>
+          </div>
+
+          <!-- Hero CTAs -->
+          <div class="hero-cta-group">
+            <a href="#sandbox" class="btn btn-primary">
+              <span>Try Interactive Sandbox</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="#quickstart" class="btn btn-secondary">Read Documentation</a>
+            <a href="#mcp-server" class="btn btn-outline">MCP Server for Claude / Cursor</a>
+          </div>
+
+          <!-- Quick Metric Feature Pills -->
+          <div class="hero-metrics">
+            <div class="metric-item">
+              <span class="metric-value">0ms</span>
+              <span class="metric-label">Local cache lookups (24h TTL)</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">~5,000</span>
+              <span class="metric-label">Bundled top PyPI safety index</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-value">FastMCP</span>
+              <span class="metric-label">Native Model Context Protocol tool</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- WHY THIS EXISTS (CONTEXT & ARCHITECTURE) -->
+      <section class="docs-section" id="why-it-exists">
+        <div class="section-header">
+          <span class="section-tag">Context & Architecture</span>
+          <h2 class="section-title">Why does <code class="title-code">isitreal</code> exist?</h2>
+          <p class="section-subtitle">
+            Autonomous coding agents generate code at incredible speed, but LLMs frequently invent plausible dependencies that don't exist—or accidentally merge two real libraries into a single non-existent package.
+          </p>
+        </div>
+
+        <div class="architecture-grid">
+          <div class="arch-card arch-danger">
+            <div class="arch-card-header">
+              <span class="arch-icon">🚨</span>
+              <h3>The Slopsquatting Attack Path</h3>
+            </div>
+            <ol class="arch-step-list">
+              <li>
+                <strong>Hallucinated Generation:</strong> An AI coding agent generates code requiring <code>jscodeshift</code> and <code>react-codemod</code>, but hallucinates <code>pip install react-codeshift</code>.
+              </li>
+              <li>
+                <strong>Attacker Registration:</strong> Security researchers & malicious actors mine LLM outputs and pre-register <code>react-codeshift</code> on PyPI with an arbitrary payload.
+              </li>
+              <li>
+                <strong>Blind Execution:</strong> Without pre-verification, the agent installs the package, executing untrusted setup scripts in your environment.
+              </li>
+            </ol>
+          </div>
+
+          <div class="arch-card arch-protected">
+            <div class="arch-card-header">
+              <span class="arch-icon">🛡️</span>
+              <h3>The isitreal Protection Layer</h3>
+            </div>
+            <ol class="arch-step-list">
+              <li>
+                <strong>Pre-install Intercept:</strong> Before writing <code>requirements.txt</code> or running <code>pip install</code>, the AI agent calls <code>verify_package("react-codeshift")</code> via MCP.
+              </li>
+              <li>
+                <strong>Instant Risk Scoring:</strong> <code>isitreal</code> detects that <code>react-codeshift</code> is an AI-hallucinated conflation target and returns <span class="risk-badge risk-high">HIGH RISK</span>.
+              </li>
+              <li>
+                <strong>Safe Correction:</strong> The agent halts installation and uses structured suggestions to use genuine dependencies instead.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- INTERACTIVE DISCOVERY / SANDBOX SECTION -->
+      <section class="docs-section sandbox-section" id="sandbox">
+        <div class="section-header">
+          <span class="section-tag">Interactive Sandbox</span>
+          <h2 class="section-title">Test package verification live</h2>
+          <p class="section-subtitle">
+            Explore how <code>isitreal</code> evaluates PyPI packages, detects hallucinated slopsquatters, and scores dependency risks in real time.
+          </p>
+        </div>
+
+        <div class="sandbox-card">
+          <div class="sandbox-tabs">
+            <button type="button" class="sandbox-tab-btn active" data-tab="single-package">Single Package Lookup</button>
+            <button type="button" class="sandbox-tab-btn" data-tab="batch-scanner">Batch requirements.txt Scanner</button>
+          </div>
+
+          <!-- TAB 1: SINGLE PACKAGE CHECK -->
+          <div class="sandbox-tab-content active" id="tab-single-package">
+            <div class="sandbox-input-row">
+              <div class="sandbox-input-wrapper">
+                <label for="package-query-input" class="sr-only">Enter Python package name</label>
+                <input 
+                  type="text" 
+                  id="package-query-input" 
+                  class="sandbox-input" 
+                  value="react-codeshift" 
+                  placeholder="Type package name (e.g. requests, react-codeshift, fancylib)..."
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+                <button type="button" id="sandbox-check-btn" class="btn btn-primary btn-sm">Check Reality</button>
+              </div>
+
+              <div class="sandbox-examples">
+                <span class="examples-label">Try example:</span>
+                <button type="button" class="example-pill" data-pkg="requests">requests</button>
+                <button type="button" class="example-pill pill-danger" data-pkg="react-codeshift">react-codeshift (hallucinated)</button>
+                <button type="button" class="example-pill pill-warn" data-pkg="fancylib">fancylib (missing)</button>
+                <button type="button" class="example-pill pill-danger" data-pkg="django-postgres">django-postgres (slopsquat)</button>
+                <button type="button" class="example-pill" data-pkg="pydantic">pydantic</button>
+              </div>
+            </div>
+
+            <!-- SIMULATION RESULT CONTAINER -->
+            <div class="sandbox-result-container" id="sandbox-result-view">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </div>
+
+          <!-- TAB 2: BATCH REQUIREMENTS SCANNER -->
+          <div class="sandbox-tab-content" id="tab-batch-scanner">
+            <div class="scanner-grid">
+              <div class="scanner-editor">
+                <div class="editor-header">
+                  <span class="editor-title">requirements.txt</span>
+                  <button type="button" class="btn-text" id="reset-scanner-btn">Reset sample</button>
+                </div>
+                <textarea id="scanner-input-textarea" class="scanner-textarea" rows="7" spellcheck="false">
+# Genuine core libraries
+requests==2.32.3
+pydantic>=2.7.0
+httpx==0.27.0
+
+# Hallucinated / slopsquatted AI agent targets
+react-codeshift>=1.0.0
+django-postgres
+fancylib==0.1.0
+                </textarea>
+                <div class="editor-actions">
+                  <button type="button" class="btn btn-primary" id="run-scan-btn">
+                    <span>Scan Dependencies (--fail-on high)</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="scanner-output" id="scanner-output-view">
+                <!-- Dynamically populated table by app.js -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- QUICKSTART & INSTALLATION -->
+      <section class="docs-section" id="quickstart">
+        <div class="section-header">
+          <span class="section-tag">Getting Started</span>
+          <h2 class="section-title">Quickstart & Installation</h2>
+          <p class="section-subtitle">
+            Install from PyPI in any Python 3.10+ environment, or install locally for development and CI/CD pipelines.
+          </p>
+        </div>
+
+        <div class="docs-card">
+          <h3>Standard PyPI Installation</h3>
+          <p>Install the standalone CLI and Python library directly via pip, uv, or poetry:</p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <button type="button" class="copy-btn" data-copy="pip install isitreal">Copy</button>
+            </div>
+            <pre><code class="language-bash">pip install isitreal</code></pre>
+          </div>
+
+          <h3 class="mt-8">Development Setup & Testing</h3>
+          <p>To clone the source repository, run tests, and develop extensions:</p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <button type="button" class="copy-btn" data-copy="git clone https://github.com/example/isitreal.git&#10;cd isitreal&#10;pip install -e '.[dev]'&#10;pytest">Copy</button>
+            </div>
+            <pre><code class="language-bash">git clone https://github.com/example/isitreal.git
+cd isitreal
+pip install -e '.[dev]'
+pytest</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- PYTHON API REFERENCE -->
+      <section class="docs-section" id="python-api">
+        <div class="section-header">
+          <span class="section-tag">Library Reference</span>
+          <h2 class="section-title">Python API Reference</h2>
+          <p class="section-subtitle">
+            Integrate verification natively into your Python automation scripts, test harnesses, or AI agent toolkits.
+          </p>
+        </div>
+
+        <div class="docs-card">
+          <h3>Core Verification Functions</h3>
+          <p>
+            <code>isitreal</code> exposes clean synchronous and batch verification methods via the <code>verify</code> module:
+          </p>
+
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">python</span>
+              <button type="button" class="copy-btn" data-copy="from isitreal import verify&#10;&#10;# 1. Verify a nonexistent package&#10;res = verify.package(&quot;fancylib&quot;)&#10;# -> PackageResult(name='fancylib', exists=False, suggestions=['fancy-lib', ...], risk=None, ...)&#10;&#10;# 2. Verify a well-established PyPI package&#10;res = verify.package(&quot;requests&quot;)&#10;# -> PackageResult(name='requests', exists=True, risk='low', age_days=5640, ...)&#10;&#10;# 3. Verify a known hallucinated/slopsquatted package&#10;res = verify.package(&quot;react-codeshift&quot;)&#10;# -> PackageResult(name='react-codeshift', exists=False, risk='high', reasons=['Package name is in the known list...'])&#10;&#10;# 4. Scan a requirements.txt or pyproject.toml file&#10;results = verify.scan(&quot;requirements.txt&quot;)&#10;# -> list[PackageResult] sorted worst-risk-first">Copy</button>
+            </div>
+            <pre><code class="language-python">from isitreal import verify
+
+# 1. Verify a nonexistent package
+res = verify.package("fancylib")
+# -> PackageResult(name='fancylib', exists=False, suggestions=['fancy-lib', ...], risk=None, ...)
+
+# 2. Verify a well-established PyPI package
+res = verify.package("requests")
+# -> PackageResult(name='requests', exists=True, risk='low', age_days=5640, ...)
+
+# 3. Verify a known hallucinated/slopsquatted package
+res = verify.package("react-codeshift")
+# -> PackageResult(name='react-codeshift', exists=False, risk='high', reasons=['Package name is in the known list...'])
+
+# 4. Scan a requirements.txt or pyproject.toml file
+results = verify.scan("requirements.txt")
+# -> list[PackageResult] sorted worst-risk-first</code></pre>
+          </div>
+
+          <h3 class="mt-8">PackageResult Data Model</h3>
+          <p>Each verification query returns an immutable Pydantic <code>PackageResult</code> instance with the following fields:</p>
+
+          <div class="table-responsive">
+            <table class="api-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>name</code></td>
+                  <td><code>str</code></td>
+                  <td>The queried package name exactly as requested.</td>
+                </tr>
+                <tr>
+                  <td><code>exists</code></td>
+                  <td><code>bool</code></td>
+                  <td>Whether the package exists on the live PyPI registry.</td>
+                </tr>
+                <tr>
+                  <td><code>canonical_name</code></td>
+                  <td><code>str | None</code></td>
+                  <td>Normalized canonical package name returned by PyPI.</td>
+                </tr>
+                <tr>
+                  <td><code>latest_version</code></td>
+                  <td><code>str | None</code></td>
+                  <td>Latest published version (e.g. <code>"2.32.3"</code>).</td>
+                </tr>
+                <tr>
+                  <td><code>summary</code></td>
+                  <td><code>str | None</code></td>
+                  <td>Short package description from PyPI metadata.</td>
+                </tr>
+                <tr>
+                  <td><code>first_release_date</code></td>
+                  <td><code>str | None</code></td>
+                  <td>ISO-8601 timestamp of the package's earliest published release.</td>
+                </tr>
+                <tr>
+                  <td><code>total_releases</code></td>
+                  <td><code>int</code></td>
+                  <td>Number of published releases in PyPI history.</td>
+                </tr>
+                <tr>
+                  <td><code>suggestions</code></td>
+                  <td><code>list[str]</code></td>
+                  <td>Fuzzy close-match alternatives against the top ~5,000 package index when <code>exists=False</code>.</td>
+                </tr>
+                <tr>
+                  <td><code>risk</code></td>
+                  <td><code>str | None</code></td>
+                  <td>Risk tier: <code>"low"</code>, <code>"unknown"</code>, or <code>"high"</code> (or <code>None</code> for typical nonexistent packages).</td>
+                </tr>
+                <tr>
+                  <td><code>reasons</code></td>
+                  <td><code>list[str]</code></td>
+                  <td>Human-readable explanations justifying the assigned risk tier.</td>
+                </tr>
+                <tr>
+                  <td><code>age_days</code></td>
+                  <td><code>int | None</code></td>
+                  <td>Age of the package in days since its first release on PyPI.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLI REFERENCE & CI/CD -->
+      <section class="docs-section" id="cli-reference">
+        <div class="section-header">
+          <span class="section-tag">Command Line Interface</span>
+          <h2 class="section-title">CLI & CI/CD Pipeline Integration</h2>
+          <p class="section-subtitle">
+            Verify single packages in your terminal or gate pull requests in automated CI pipelines using threshold exit codes.
+          </p>
+        </div>
+
+        <div class="docs-card">
+          <h3>1. Check a Single Package</h3>
+          <p>Use <code>isitreal check &lt;package&gt;</code> to print a rich formatted diagnostic panel:</p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <button type="button" class="copy-btn" data-copy="isitreal check requests&#10;isitreal check react-codeshift">Copy</button>
+            </div>
+            <pre><code class="language-bash">isitreal check requests
+isitreal check react-codeshift</code></pre>
+          </div>
+
+          <h3 class="mt-8">2. Scan Dependency Files</h3>
+          <p>Scan <code>requirements.txt</code> or <code>pyproject.toml</code> and display a structured table sorted <strong>worst-risk-first</strong>:</p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <button type="button" class="copy-btn" data-copy="isitreal scan requirements.txt">Copy</button>
+            </div>
+            <pre><code class="language-bash">isitreal scan requirements.txt</code></pre>
+          </div>
+
+          <h3 class="mt-8">3. Automated CI/CD Gating (--fail-on)</h3>
+          <p>
+            Use the <code>--fail-on</code> flag to exit with nonzero code <code>1</code> whenever any dependency matches or exceeds the specified risk threshold:
+          </p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">bash</span>
+              <button type="button" class="copy-btn" data-copy="isitreal scan requirements.txt --fail-on high">Copy</button>
+            </div>
+            <pre><code class="language-bash">isitreal scan requirements.txt --fail-on high</code></pre>
+          </div>
+
+          <h4 class="mt-4">Example GitHub Actions CI Workflow</h4>
+          <p>Add dependency reality-checking to your pull request pipeline:</p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">yaml</span>
+              <button type="button" class="copy-btn" data-copy="name: Dependency Reality Check&#10;on: [push, pull_request]&#10;&#10;jobs:&#10;  verify-deps:&#10;    runs-on: ubuntu-latest&#10;    steps:&#10;      - uses: actions/checkout@v4&#10;      - name: Set up Python&#10;        uses: actions/setup-python@v5&#10;        with:&#10;          python-version: '3.12'&#10;      - name: Install isitreal&#10;        run: pip install isitreal&#10;      - name: Scan requirements for slopsquatting / hallucinations&#10;        run: isitreal scan requirements.txt --fail-on high">Copy</button>
+            </div>
+            <pre><code class="language-yaml">name: Dependency Reality Check
+on: [push, pull_request]
+
+jobs:
+  verify-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install isitreal
+        run: pip install isitreal
+      - name: Scan requirements for slopsquatting / hallucinations
+        run: isitreal scan requirements.txt --fail-on high</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- MCP SERVER FOR AI AGENTS -->
+      <section class="docs-section" id="mcp-server">
+        <div class="section-header">
+          <span class="section-tag">Model Context Protocol</span>
+          <h2 class="section-title">MCP Server for AI Agents</h2>
+          <p class="section-subtitle">
+            Equip Claude Desktop, Claude Code, Cursor, and custom autonomous agents with native tools to verify dependencies before writing files.
+          </p>
+        </div>
+
+        <div class="docs-card">
+          <h3>Native FastMCP Implementation</h3>
+          <p>
+            <code>isitreal</code> bundles an official Python Model Context Protocol (MCP) server built on <code>FastMCP</code>. 
+            When connected, AI agents automatically query two tools:
+          </p>
+          <ul class="feature-list">
+            <li>
+              <strong><code>verify_package(name: str, ecosystem: str = "pypi") -&gt; PackageResult</code></strong> —
+              Checks a single package for existence, release age, download signals, and slopsquatting lists.
+            </li>
+            <li>
+              <strong><code>verify_dependencies(file_contents: str) -&gt; list[PackageResult]</code></strong> —
+              Parses requirements text or <code>pyproject.toml</code> content and returns an ordered risk assessment.
+            </li>
+          </ul>
+
+          <h3 class="mt-8">Configuration in Claude Desktop</h3>
+          <p>
+            Add the server to your Claude Desktop configuration file (<code>~/.config/Claude/claude_desktop_config.json</code> on macOS/Linux or <code>%APPDATA%\Claude\claude_desktop_config.json</code> on Windows):
+          </p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">json</span>
+              <button type="button" class="copy-btn" data-copy="{&#10;  &quot;mcpServers&quot;: {&#10;    &quot;isitreal&quot;: {&#10;      &quot;command&quot;: &quot;isitreal-mcp&quot;&#10;    }&#10;  }&#10;}">Copy</button>
+            </div>
+            <pre><code class="language-json">{
+  "mcpServers": {
+    "isitreal": {
+      "command": "isitreal-mcp"
+    }
+  }
+}</code></pre>
+          </div>
+
+          <h3 class="mt-8">Configuration in Claude Code / CLI (`.claude.json`)</h3>
+          <p>Configure project-wide verification for Claude Code by editing your repository's <code>.claude.json</code>:</p>
+          <div class="code-block-wrapper">
+            <div class="code-header">
+              <span class="code-lang">json</span>
+              <button type="button" class="copy-btn" data-copy="{&#10;  &quot;mcpServers&quot;: {&#10;    &quot;isitreal&quot;: {&#10;      &quot;command&quot;: &quot;isitreal-mcp&quot;,&#10;      &quot;args&quot;: []&#10;    }&#10;  }&#10;}">Copy</button>
+            </div>
+            <pre><code class="language-json">{
+  "mcpServers": {
+    "isitreal": {
+      "command": "isitreal-mcp",
+      "args": []
+    }
+  }
+}</code></pre>
+          </div>
+
+          <div class="alert-box alert-tip mt-6">
+            <div class="alert-icon">💡</div>
+            <div class="alert-content">
+              <strong>Agent Behavior Tip:</strong> Once registered, instruct your system prompt or AI agent: 
+              <em>"Always call <code>verify_package</code> via the isitreal MCP server before installing any third-party Python dependency or modifying requirements.txt."</em>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RISK SCORING ENGINE EXPLAINED -->
+      <section class="docs-section" id="risk-scoring">
+        <div class="section-header">
+          <span class="section-tag">Safety Algorithm</span>
+          <h2 class="section-title">Risk Scoring Engine Explained</h2>
+          <p class="section-subtitle">
+            How <code>isitreal</code> computes explainable, transparent risk classifications without triggering false positives.
+          </p>
+        </div>
+
+        <div class="risk-cards-grid">
+          <div class="risk-card risk-tier-high">
+            <div class="risk-tier-badge risk-high">HIGH RISK</div>
+            <h4>Immediate Danger Signals</h4>
+            <p>Assigned when any of the following critical conditions are met:</p>
+            <ul>
+              <li><strong>Known Hallucinated List:</strong> Package is present in our curated security database of LLM hallucinations and slopsquats (e.g. <code>react-codeshift</code>, <code>django-postgres</code>).</li>
+              <li><strong>Conflation Detection:</strong> Name is a concatenation or hyphenation of two distinct top PyPI packages (e.g. merging <code>jscodeshift</code> + <code>react-codemod</code>).</li>
+              <li><strong>Infant Release Age:</strong> Package exists on PyPI but was first published <strong>less than 30 days ago</strong>.</li>
+            </ul>
+          </div>
+
+          <div class="risk-card risk-tier-low">
+            <div class="risk-tier-badge risk-low">LOW RISK</div>
+            <h4>Trusted & Established</h4>
+            <p>Assigned when strong historical and download safety signals confirm legitimacy:</p>
+            <ul>
+              <li><strong>Top ~5,000 PyPI Index:</strong> Package is present in our bundled local index of the most downloaded PyPI libraries.</li>
+              <li><strong>Mature Release History:</strong> Package has been published for &ge; 365 days with consistent release metadata and substantial download activity.</li>
+            </ul>
+          </div>
+
+          <div class="risk-card risk-tier-unknown">
+            <div class="risk-tier-badge risk-unknown">UNKNOWN RISK</div>
+            <h4>Unverified / Offline Fallback</h4>
+            <p>Assigned when signals are inconclusive or network access is unavailable:</p>
+            <ul>
+              <li><strong>Niche Existing Packages:</strong> Valid package published between 30 and 365 days without high download volume.</li>
+              <li><strong>Graceful Degradation:</strong> If PyPI network queries fail, <code>isitreal</code> degrades gracefully to <code>"unknown"</code> without crashing CI pipelines.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="site-footer">
+        <div class="footer-container">
+          <div class="footer-left">
+            <div class="footer-brand">
+              <img src="favicon.svg" alt="isitreal" width="24" height="24" />
+              <span>isitreal</span>
+            </div>
+            <p class="footer-copy">
+              Dependency reality-checker for AI coding agents. MIT License &copy; 2026 Antigravity (Google DeepMind).
+            </p>
+          </div>
+
+          <div class="footer-links">
+            <a href="https://github.com/example/isitreal" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+            <a href="https://pypi.org/project/isitreal" target="_blank" rel="noopener noreferrer">PyPI Package</a>
+            <a href="#hero">Back to Top ↑</a>
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <!-- Right Sidebar Table of Contents (Desktop Scrollspy) -->
+    <aside class="toc-sidebar" id="toc-sidebar" aria-label="Table of contents">
+      <div class="toc-sticky-container">
+        <h3 class="toc-heading">On This Page</h3>
+        <nav class="toc-nav" id="toc-nav">
+          <a href="#hero" class="toc-link active">Overview</a>
+          <a href="#why-it-exists" class="toc-link">Why This Exists</a>
+          <a href="#sandbox" class="toc-link">Interactive Sandbox</a>
+          <a href="#quickstart" class="toc-link">Quickstart & Install</a>
+          <a href="#python-api" class="toc-link">Python API</a>
+          <a href="#cli-reference" class="toc-link">CLI & CI/CD</a>
+          <a href="#mcp-server" class="toc-link">MCP Server</a>
+          <a href="#risk-scoring" class="toc-link">Risk Scoring Engine</a>
+        </nav>
+        <div class="toc-cta-box">
+          <span class="toc-cta-title">Need help?</span>
+          <p class="toc-cta-text">Open an issue or contribute signatures on GitHub.</p>
+          <a href="https://github.com/example/isitreal/issues" target="_blank" rel="noopener noreferrer" class="toc-cta-link">View Issues →</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Command Palette / Quick Search Modal (Cmd+K) -->
+  <div class="search-modal-backdrop" id="search-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Search documentation">
+    <div class="search-modal-box">
+      <div class="search-input-header">
+        <svg class="search-modal-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="modal-search-input" class="modal-search-input" placeholder="Search documentation, API, CLI flags, MCP..." autocomplete="off" />
+        <button type="button" class="modal-close-btn" id="close-modal-btn" aria-label="Close search modal">ESC</button>
+      </div>
+      <div class="search-results-list" id="search-results-list">
+        <!-- Search results dynamically rendered by app.js -->
+      </div>
+      <div class="search-modal-footer">
+        <span><kbd>↑</kbd> <kbd>↓</kbd> to navigate</span>
+        <span><kbd>Enter</kbd> to select</span>
+        <span><kbd>ESC</kbd> to close</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
