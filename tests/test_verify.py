@@ -1,7 +1,7 @@
 import pytest
 import respx
 from httpx import Response, ConnectError
-from slopguard import verify
+from isitreal import verify
 
 
 def test_verify_requests_package(mock_pypi):

@@ -4,7 +4,7 @@ import time
 from pathlib import Path
 from typing import Any, Optional
 
-DEFAULT_CACHE_DIR = Path(os.environ.get("SLOPGUARD_CACHE_DIR", Path.home() / ".cache" / "slopguard"))
+DEFAULT_CACHE_DIR = Path(os.environ.get("ISITREAL_CACHE_DIR", Path.home() / ".cache" / "isitreal"))
 DEFAULT_TTL = 86400  # 24 hours in seconds
 _CACHE_ENABLED = True
 
@@ -19,7 +19,7 @@ def is_cache_enabled() -> bool:
 
 
 def get_cache_dir() -> Path:
-    cache_dir_str = os.environ.get("SLOPGUARD_CACHE_DIR")
+    cache_dir_str = os.environ.get("ISITREAL_CACHE_DIR")
     if cache_dir_str:
         return Path(cache_dir_str)
     return DEFAULT_CACHE_DIR

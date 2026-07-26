@@ -2,10 +2,10 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 import httpx
 
-from slopguard import cache
-from slopguard.models import PackageResult
-from slopguard.risk import compute_risk, get_fuzzy_suggestions
-from slopguard.scanner import parse_dependencies, _risk_sort_key
+from isitreal import cache
+from isitreal.models import PackageResult
+from isitreal.risk import compute_risk, get_fuzzy_suggestions
+from isitreal.scanner import parse_dependencies, _risk_sort_key
 
 
 def _get_package_downloads(name: str) -> Optional[int]:

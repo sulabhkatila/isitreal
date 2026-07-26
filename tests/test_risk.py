@@ -1,4 +1,4 @@
-from slopguard.risk import (
+from isitreal.risk import (
     check_conflation,
     compute_risk,
     get_fuzzy_suggestions,

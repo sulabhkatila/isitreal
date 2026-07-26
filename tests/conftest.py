@@ -1,13 +1,13 @@
 import pytest
 import respx
 from httpx import Response
-from slopguard import cache
+from isitreal import cache
 
 
 @pytest.fixture(autouse=True)
 def isolated_cache(tmp_path, monkeypatch):
     """Use an isolated temporary cache directory for every test."""
-    monkeypatch.setenv("SLOPGUARD_CACHE_DIR", str(tmp_path / "cache"))
+    monkeypatch.setenv("ISITREAL_CACHE_DIR", str(tmp_path / "cache"))
     cache.clear_cache()
     yield
     cache.clear_cache()

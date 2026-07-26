@@ -1,4 +1,4 @@
-# slopguard
+# isitreal
 
 **Dependency reality-checker for AI coding agents-- verify before install, not scan after the fact.**
 
@@ -8,7 +8,7 @@
 
 AI coding agents frequently hallucinate package names, inventing plausible but nonexistent dependencies, or conflating two real packages into a fake one (e.g. `jscodeshift` + `react-codemod` → `react-codeshift`). Attackers pre-register these hallucinated names with malicious payloads ("slopsquatting"), so an agent that installs a dependency without verifying it first can pull in attacker-controlled code.
 
-`slopguard` closes that gap: it lets an AI coding agent check, in one call, whether a package name is real, safe, and well-established — **before** adding it to a project or running `pip install`.
+`isitreal` closes that gap: it lets an AI coding agent check, in one call, whether a package name is real, safe, and well-established — **before** adding it to a project or running `pip install`.
 
 ---
 
@@ -30,7 +30,7 @@ AI coding agents frequently hallucinate package names, inventing plausible but n
 Install from PyPI (or locally from source):
 
 ```bash
-pip install slopguard
+pip install isitreal
 ```
 
 For development and running tests:
@@ -44,12 +44,12 @@ pytest
 
 ## Interfaces
 
-`slopguard` exposes three distinct interfaces in priority order:
+`isitreal` exposes three distinct interfaces in priority order:
 
 ### 1. Python API
 
 ```python
-from slopguard import verify
+from isitreal import verify
 
 # Verify a nonexistent package
 res = verify.package("fancylib")
@@ -87,19 +87,19 @@ results = verify.scan("requirements.txt")
 
 Verify a single package:
 ```bash
-slopguard check fancylib
-slopguard check requests
+isitreal check fancylib
+isitreal check requests
 ```
 
 Scan a dependency file (`requirements.txt` or `pyproject.toml`):
 ```bash
-slopguard scan requirements.txt
+isitreal scan requirements.txt
 ```
 
 Fail in CI pipelines if any package is high risk:
 ```bash
-slopguard scan requirements.txt --fail-on high
-slopguard check react-codeshift --fail-on high
+isitreal scan requirements.txt --fail-on high
+isitreal check react-codeshift --fail-on high
 ```
 *(Exits with nonzero code `1` when a matching or higher risk threshold is encountered.)*
 
@@ -107,22 +107,22 @@ slopguard check react-codeshift --fail-on high
 
 ### 3. Model Context Protocol (MCP) Server
 
-`slopguard` includes a native Model Context Protocol (MCP) server built with the official Python `mcp` SDK (`FastMCP`), exposing two tools:
+`isitreal` includes a native Model Context Protocol (MCP) server built with the official Python `mcp` SDK (`FastMCP`), exposing two tools:
 
 - `verify_package(name: str, ecosystem: str = "pypi") -> PackageResult`
 - `verify_dependencies(file_contents: str) -> list[PackageResult]`
 
 #### Registering in Claude Code / Claude Desktop / AI Agents
 
-You can run the server via either `slopguard-mcp` or `slopguard mcp`.
+You can run the server via either `isitreal-mcp` or `isitreal mcp`.
 
 Add the server to your Claude Desktop configuration (`~/.config/Claude/claude_desktop_config.json` on macOS/Linux or `%APPDATA%\Claude\claude_desktop_config.json` on Windows):
 
 ```json
 {
   "mcpServers": {
-    "slopguard": {
-      "command": "slopguard-mcp"
+    "isitreal": {
+      "command": "isitreal-mcp"
     }
   }
 }
@@ -133,8 +133,8 @@ Or configure it in your Claude Code project (`.claude.json`):
 ```json
 {
   "mcpServers": {
-    "slopguard": {
-      "command": "slopguard-mcp",
+    "isitreal": {
+      "command": "isitreal-mcp",
       "args": []
     }
   }

@@ -1,1 +1,1 @@
-# Test suite for slopguard
+# Test suite for isitreal

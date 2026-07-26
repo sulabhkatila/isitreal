@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "slopguard"
+name = "isitreal"
 version = "0.1.0"
 description = "Dependency reality-checker for AI coding agents to verify packages before installing"
 readme = "README.md"
@@ -45,9 +45,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/example/slopguard"
-Repository = "https://github.com/example/slopguard"
-Issues = "https://github.com/example/slopguard/issues"
+Homepage = "https://github.com/example/isitreal"
+Repository = "https://github.com/example/isitreal"
+Issues = "https://github.com/example/isitreal/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -58,11 +58,11 @@ dev = [
 ]
 
 [project.scripts]
-slopguard = "slopguard.cli:main"
-slopguard-mcp = "slopguard.mcp_server:main"
+isitreal = "isitreal.cli:main"
+isitreal-mcp = "isitreal.mcp_server:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["slopguard"]
+packages = ["isitreal"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
